@@ -123,7 +123,7 @@ class ProductoPedido(models.Model):
 
     class Meta:
         ordering = ['pedido']
-        db_table = '?roductos_pedidos'
+        db_table = 'productos_pedidos'
 
     def __unicode__(self):
         return '%s - %s' % (self.pedido, self.producto)
