@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Publishers</title>
+</head>
+<body>
+    <h2>Publishers</h2>
+    <ul>
+        {% for publisher in publisher_list %}
+            <li>{{ publisher.name }}</li>
+        {% endfor %}
+        <h2>Editoriales: </h2>
+        {{editorial}}
+    </ul>
+</body>
+</html>

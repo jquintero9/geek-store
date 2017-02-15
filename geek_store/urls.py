@@ -15,7 +15,10 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from administrador.views import PublisherList,PublisherDetail, PublisherFilter
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^publisher/$', PublisherList.as_view(), name='publisher'),
+    url(r'^publisher/([\w-]+)/$', PublisherFilter.as_view()),
 ]
