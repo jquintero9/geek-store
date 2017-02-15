@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Cliente, Direccion, Departamento, Ciudad
+from .models import Cliente, Direccion, Departamento, Ciudad, Pago, Pedido, ProductoPedido
 
 # Register your models here.
 
@@ -28,7 +28,25 @@ class ClienteAdmin(admin.ModelAdmin):
         model = Cliente
 
 
+class PedidoAdmin(admin.ModelAdmin):
+
+    list_display = ['cliente', 'fecha', 'fecha_entrega', 'pago']
+
+    class Meta:
+        model = Pedido
+
+
+class ProductoPedidoAdmin(admin.ModelAdmin):
+
+    list_display = ['id', 'pedido', 'producto', 'cantidad', 'total']
+
+    class Meta:
+        model = ProductoPedido
+
 admin.site.register(Direccion, DireccionAdmin)
 admin.site.register(Departamento)
 admin.site.register(Ciudad)
 admin.site.register(Cliente, ClienteAdmin)
+admin.site.register(Pago)
+admin.site.register(Pedido, PedidoAdmin)
+admin.site.register(ProductoPedido, ProductoPedidoAdmin)
