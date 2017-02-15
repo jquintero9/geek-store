@@ -20,7 +20,15 @@ class CiudadAdmin(admin.ModelAdmin):
         model = Ciudad
 
 
+class ClienteAdmin(admin.ModelAdmin):
+
+    list_display = ['usuario', 'genero', 'fecha_registro', 'direccion', 'ciudad']
+
+    class Meta:
+        model = Cliente
+
+
 admin.site.register(Direccion, DireccionAdmin)
 admin.site.register(Departamento)
 admin.site.register(Ciudad)
-admin.site.register(Cliente)
+admin.site.register(Cliente, ClienteAdmin)
