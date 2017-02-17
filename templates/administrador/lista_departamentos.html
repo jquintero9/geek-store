@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Departamentos</title>
+</head>
+<body>
+    {% if messages %}
+    <div>
+        {% for message in messages %}
+        <span>{{message}}-{{message.tags}}</span>
+        {% endfor %}
+    </div>
+    {% endif %}
+    <ul>
+        {% for n in numeros %}
+        <li>{{n}}</li>
+        {% endfor %}
+    </ul>
+    {% if lista_departamentos %}
+    <ul>
+        {% for departamento in lista_departamentos %}
+        <li>{{departamento.id}} - {{departamento}}</li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <h2>La lista de Departamentos está vacia.</h2>
+    {% endif %}
+</body>
+</html>

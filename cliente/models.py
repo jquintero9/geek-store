@@ -6,22 +6,23 @@ from __future__ import unicode_literals
 from django.db import models
 from usuario.models import Usuario
 from administrador.models import Producto
-
-
+from django.core.validators import RegexValidator
+from usuario.forms import Regex
 '''
 Modelo Departamento: Representa los departamentos de Colombia.
 '''
 
 
 class Departamento(models.Model):
-    nombre = models.CharField(max_length=30)
+    nombre = models.CharField(max_length=30,
+                              validators=[RegexValidator(regex=Regex.texto, message=Regex.mensaje_texto)],
+                              unique=True)
 
     class Meta:
         ordering = ['nombre']
 
     def __unicode__(self):
         return self.nombre
-
 
 '''
 Modelo Ciudad: Representa las ciudades y los municipios de colombia,
@@ -44,9 +45,9 @@ class Ciudad(models.Model):
 Modelo Dirección: Representa la dirección de los usuarios administradores y clientes.
 '''
 
-
+'''
 class Direccion(models.Model):
-
+    avenida = models.CharField(max_length=30)
     calle = models.CharField(max_length=30, null=True, default='no tiene')
     carrera = models.CharField(max_length=30, null=True, default='no tiene')
     numero = models.CharField(max_length=10)
@@ -54,7 +55,7 @@ class Direccion(models.Model):
 
     def __unicode__(self):
         return '%s # %s %s' % (self.calle, self.numero, self.barrio)
-
+'''
 
 '''
 Modelo Cliente: Representa los clientes que acceden a la página para realizar sus compras.
@@ -65,7 +66,7 @@ class Cliente(models.Model):
     usuario = models.OneToOneField(Usuario, primary_key=True, on_delete=models.CASCADE)
     genero = models.CharField(max_length=9)
     fecha_registro = models.DateField(auto_now_add=True)
-    direccion = models.ForeignKey('Direccion', on_delete=models.PROTECT)
+    direccion = models.TextField(max_length=100)
     ciudad = models.ForeignKey('Ciudad', on_delete=models.PROTECT)
 
     def __unicode__(self):
