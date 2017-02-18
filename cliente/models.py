@@ -71,7 +71,7 @@ class Cliente(models.Model):
 
     class Meta:
         permissions = [
-            ('see_profile', 'ver perfil')
+            ('es_cliente', 'es cliente')
         ]
 
     def __unicode__(self):

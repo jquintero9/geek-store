@@ -9,6 +9,8 @@ from usuario.models import Usuario
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from django.contrib.auth.decorators import permission_required
+from django.http import Http404
+from django.core.exceptions import PermissionDenied
 
 
 def home(request):
@@ -39,9 +41,9 @@ class PerfilCliente(View):
             try:
                 usuario = Usuario.objects.get(user=request.user)
                 self.cliente = Cliente.objects.get(usuario=usuario)
-            except ObjectDoesNotExist:
-                messages.error(request, u'El Cliente no existe.')
+            except Exception:
+                raise Http404(u'El Cliente no existe')
         else:
-            messages.warning(request, u'No tienes el permiso para ver esta página.')
+            raise PermissionDenied
 
         return render(request, self.template, {'cliente': self.cliente})

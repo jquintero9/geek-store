@@ -18,6 +18,11 @@ class Administrador(models.Model):
 
     usuario = models.OneToOneField(Usuario, primary_key=True, on_delete=models.CASCADE)
 
+    class Meta:
+        permissions = [
+            ('es_administrador', 'es administrador')
+        ]
+
     def __unicode__(self):
         return '%s - %s %s' % (self.usuario.identificacion, self.usuario.nombres, self.usuario.apellidos)
 

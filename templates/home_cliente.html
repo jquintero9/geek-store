@@ -6,5 +6,11 @@
 </head>
 <body>
 {{user.username}}
+{% if not user.is_authenticated %}
+<a href="{% url 'cuentas:iniciar_sesion' %}">Iniciar Sesión</a>
+{% else %}
+<a href="{% url 'cuentas:cerrar_sesion' %}">Cerrar Sesión</a>
+{% endif %}
+
 </body>
 </html>

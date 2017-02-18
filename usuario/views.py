@@ -13,6 +13,10 @@ from django.contrib.auth.models import Permission
 # Create your views here.
 
 
+def acceso_denegado(request):
+    return render(request, '403.html', {'texto': 'no se pede acceder'})
+
+
 class CerrarSesion(View):
     success_url = reverse_lazy('cuentas:iniciar_sesion')
 
@@ -24,7 +28,7 @@ class CerrarSesion(View):
 class IniciarSesion(View):
     form_class = None
     template_name = 'usuario/iniciar_sesion.html'
-    success_url = reverse_lazy('home_cliente')
+    success_url = None
 
     def get(self, request):
         self.form_class = LoginForm()
@@ -40,11 +44,19 @@ class IniciarSesion(View):
             user = authenticate(username=email, password=password)
 
             if user is not None:
-                login(request, user)
-                print user.has_perm('cliente.see_profile')
-                return HttpResponseRedirect(self.success_url)
+                if user.is_active:
+                    login(request, user)
+
+                    if user.has_perm('cliente.es_cliente'):
+                        self.success_url = reverse_lazy('home_cliente')
+                    elif user.has_perm('administrador.es_administrador'):
+                        self.success_url = reverse_lazy('administrador:home')
+
+                    return HttpResponseRedirect(self.success_url)
+                else:
+                    messages.warning(request, u'Esta cuenta %s no se encuentra activada.' % email)
             else:
-                messages.error(request, u'El usuario no se encuentra registrado.')
+                messages.error(request, u'Este usuario %s no se encuentra registrado.' % email)
 
         return render(request, self.template_name, {'form': self.form_class})
 
@@ -74,7 +86,7 @@ class RegistroUsuario(View):
                                             password=self.form_user.cleaned_data['password'],
                                             email=self.form_user.cleaned_data['email'],)
 
-            permiso = Permission.objects.get(name='ver perfil')
+            permiso = Permission.objects.get(name='es cliente')
             user.user_permissions.add(permiso)
 
             usuario = Usuario(

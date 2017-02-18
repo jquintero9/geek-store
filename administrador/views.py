@@ -13,9 +13,49 @@ from .forms import CrearDepartamentoForm
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views import View
-
+from django.core.exceptions import PermissionDenied
+from django.contrib.auth.decorators import permission_required, login_required
+from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
+from usuario.forms import LoginForm
+from django.contrib.auth import login, authenticate
+from django.http import HttpResponseRedirect
 # Create your views here.
 
+
+@login_required(login_url=reverse_lazy('administrador:login_admin'))
+def home(request):
+    if request.user.has_perm('administrador.es_administrador'):
+        return render(request, 'administrador/home.html', {})
+    else:
+        raise PermissionDenied
+
+
+'''class LoginAdmin(View):
+
+    template_name = 'administrador/login.html'
+    form = None
+    success_url = reverse_lazy('administrador:home')
+
+    def get(self, request):
+        self.form = LoginForm()
+        return render(request, self.template_name, {'form': self.form})
+
+    def post(self, request):
+        self.form = LoginForm(request.POST)
+        if self.form.is_valid():
+            user = authenticate(username=self.form.cleaned_data['email'],
+                                password=self.form.cleaned_data['password'])
+            if user is not None:
+                if user.is_active:
+                    login(request, user)
+                    return HttpResponseRedirect(self.success_url)
+                else:
+                    messages.warning(request, u'La cuenta de este usuario no está activada.')
+            else:
+                messages.error(request, u'El correo y/o la contraseña son incorrectos.')
+
+        return render(request, self.template_name, {'form': self.form})
+'''
 
 class ListaDepartamento(ListView):
     model = Departamento
@@ -28,18 +68,25 @@ class ListaDepartamento(ListView):
         return context
 
 
-class CrearDepartamento(SuccessMessageMixin, CreateView):
+class CrearDepartamento(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     model = Departamento
     form_class = CrearDepartamentoForm
     template_name = 'administrador/departamento_create_form.html'
     success_url = reverse_lazy('administrador:lista_departamentos')
     success_message = u'Se ha creado el departamento %(nombre)s con éxito'
+    login_url = reverse_lazy('administrador:login_admin')
 
-    '''def post(self, request, *args, **kwargs):
-        c = super(CrearDepartamento, self).post(request, *args, **kwargs)
-        messages.success(self.request, 'Departamento creado')
-        return c
-    '''
+    def get(self, request, *args, **kwargs):
+        if request.user.has_perm('administrador.es_administrador'):
+            return super(CrearDepartamento, self).get(request, *args, **kwargs)
+        else:
+            raise PermissionDenied
+
+    def post(self, request, *args, **kwargs):
+        if request.user.has_perm('administrador.es_administrador'):
+            return super(CrearDepartamento, self).post(request, *args, **kwargs)
+        else:
+            raise PermissionDenied
 
 
 class EliminarDepartamento(DeleteView):
