@@ -16,12 +16,15 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from administrador.views import PublisherList,PublisherDetail, PublisherFilter
+from cliente.views import home, PerfilCliente
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'accounts/', include('usuario.urls_cuentas', namespace='cuentas')),
     url(r'^administrador/', include('administrador.urls', namespace='administrador')),
     url(r'^cliente/', include('cliente.urls', namespace='cliente')),
+    url(r'^$', home, name='home_cliente'),
+    url(r'^perfil$', PerfilCliente.as_view(), name='perfil_cliente'),
     url(r'^publisher/$', PublisherList.as_view(), name='publisher'),
     url(r'^publisher/([\w-]+)/$', PublisherFilter.as_view()),
 ]

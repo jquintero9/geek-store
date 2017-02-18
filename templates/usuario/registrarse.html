@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrarse</title>
+</head>
+<body>
+<form action="" method="post"> {% csrf_token %}
+    {{formUsuario.as_p}}
+    {{formCliente.as_p}}
+    {% if formUser.email.errors %}
+    <div>
+        {% for error in formUser.email.errors %}
+        <span>{{error}}</span>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {{formUser.email}}
+    <div>
+        {% for error in formUser.password.errors %}
+        <span>{{error}}</span>
+        {% endfor %}
+    </div>
+    <input type="password" name="password" maxlength="16" placeholder="Password" required />
+    <div>
+        {% for error in formUser.confirmar_password.errors %}
+        <span>{{error}}</span>
+        {% endfor %}
+    </div>
+    <input type="password" name="confirmar_password" placeholder="Confirmar Password" required />
+
+    <input type="submit" value="Crear" />
+</form>
+</body>
+</html>

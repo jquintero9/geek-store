@@ -4,10 +4,10 @@
 from __future__ import unicode_literals
 
 from django.db import models
-from usuario.models import Usuario
+from usuario.models import Usuario, Regex
 from administrador.models import Producto
 from django.core.validators import RegexValidator
-from usuario.forms import Regex
+
 '''
 Modelo Departamento: Representa los departamentos de Colombia.
 '''
@@ -68,6 +68,11 @@ class Cliente(models.Model):
     fecha_registro = models.DateField(auto_now_add=True)
     direccion = models.TextField(max_length=100)
     ciudad = models.ForeignKey('Ciudad', on_delete=models.PROTECT)
+
+    class Meta:
+        permissions = [
+            ('see_profile', 'ver perfil')
+        ]
 
     def __unicode__(self):
         return self.usuario.user.username

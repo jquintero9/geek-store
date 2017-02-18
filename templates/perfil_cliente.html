@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Perfil - {{cliente.usuario.user.username}}</title>
+</head>
+<body>
+{% if messages %}
+<div>
+    {% for message in messages %}
+    <span>{{message}}</span>
+    {% endfor %}
+</div>
+{% endif %}
+
+<ul>
+    <li>Correo: {{cliente.usuario.user.username}}</li>
+    <li>Indentificación: {{cliente.usuario.identificacion}}</li>
+    <li>Nombres: {{cliente.usuario.nombres}}</li>
+    <li>Apellidos: {{cliente.usuario.apellidos}}</li>
+    <li>Fecha de Nacimiento: {{cliente.usuario.fecha_nacimiento}}</li>
+    <li>Teléfono: {{cliente.usuario.telefono}}</li>
+    <li>Género: {{cliente.genero}}</li>
+    <li>Fecha de Alta: {{cliente.fecha_alta}}</li>
+    <li>Dirección: {{cliente.direccion}}</li>
+    <li>Ciudad: {{cliente.ciudad}}</li>
+</ul>
+</body>
+</html>
